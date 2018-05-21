@@ -8,11 +8,11 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 inherit packagegroup
 
 RDEPENDS_${PN} = " \
-    libgl-mx6 \
-    libgles-mx6 \
-    libgles2-mx6 \
-    libopenvg-mx6 \
-    libvdk-mx6 \
+    libgl-imx \
+    libgles-imx \
+    libgles2-imx \
+    libopenvg-imx \
+    libvdk-imx \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', '', \
        bb.utils.contains('DISTRO_FEATURES',     'x11', 'xserver-xorg-extension-viv-autohdmi', \
                                                        '', d), d)} \

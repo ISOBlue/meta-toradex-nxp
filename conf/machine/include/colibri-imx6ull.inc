@@ -1,0 +1,6 @@
+IMAGE_CLASSES += "image_type_tezi"
+IMAGE_FSTYPES_append = " teziimg"
+TORADEX_PRODUCT_IDS = "0036 0040"
+TORADEX_PRODUCT_IDS[0036] = "imx6ull-colibri-eval-v3.dtb"
+TORADEX_PRODUCT_IDS[0040] = "imx6ull-colibri-wifi-eval-v3.dtb"
+TORADEX_FLASH_TYPE = "rawnand"
