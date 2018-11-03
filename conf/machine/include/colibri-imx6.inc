@@ -12,3 +12,9 @@ UBOOT_SUFFIX = "img"
 PREFERRED_PROVIDER_virtual/libg2d_mx6 ?= "imx-gpu-g2d"
 
 MACHINE_FIRMWARE_remove = "firmware-imx-epdc"
+
+# Use i.MX Gstreamer Version
+PREFERRED_VERSION_gstreamer1.0 = "1.12.imx"
+PREFERRED_VERSION_gstreamer1.0-plugins-base = "1.12.imx"
+PREFERRED_VERSION_gstreamer1.0-plugins-good = "1.12.imx"
+PREFERRED_VERSION_gstreamer1.0-plugins-bad = "1.12.imx"

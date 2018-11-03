@@ -23,7 +23,7 @@ SRC_URI += " \
 S = "${WORKDIR}/git/"
 
 #we want imx_usb binary to run on a 32-bit architecture, on x86_64 this requires the 32-bit compatibility libs
-EXTRA_OEMAKE_class-native = "CC='${CC} -m32' CXX='${CXX} -m32'"
+EXTRA_OEMAKE_class-native = "CC='${CC}' CXX='${CXX}'"
 
 do_install () {
     oe_runmake DESTDIR=${D} install

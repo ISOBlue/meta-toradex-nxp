@@ -7,3 +7,9 @@ TORADEX_PRODUCT_IDS[0041] = "imx7d-colibri-eval-v3.dtb"
 TORADEX_FLASH_TYPE = "rawnand"
 
 MACHINE_FIRMWARE_remove = "firmware-imx-epdc"
+
+# Use i.MX Gstreamer Version (for PXP DMA-ENGINE Driver)
+PREFERRED_VERSION_gstreamer1.0 = "1.12.imx"
+PREFERRED_VERSION_gstreamer1.0-plugins-base = "1.12.imx"
+PREFERRED_VERSION_gstreamer1.0-plugins-good = "1.12.imx"
+PREFERRED_VERSION_gstreamer1.0-plugins-bad = "1.12.imx"

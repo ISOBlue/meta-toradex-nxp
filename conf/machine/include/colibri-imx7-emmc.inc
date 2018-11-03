@@ -6,3 +6,9 @@ TORADEX_PRODUCT_IDS = "0039"
 TORADEX_FLASH_TYPE = "emmc"
 
 MACHINE_FIRMWARE_remove = "firmware-imx-epdc"
+
+# Use i.MX Gstreamer Version (for PXP DMA-ENGINE Driver)
+PREFERRED_VERSION_gstreamer1.0 = "1.12.imx"
+PREFERRED_VERSION_gstreamer1.0-plugins-base = "1.12.imx"
+PREFERRED_VERSION_gstreamer1.0-plugins-good = "1.12.imx"
+PREFERRED_VERSION_gstreamer1.0-plugins-bad = "1.12.imx"
