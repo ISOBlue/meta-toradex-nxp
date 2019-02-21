@@ -1,0 +1,58 @@
+--- b/arch/x86/kernel/cpu/bugs.c
++++ a/arch/x86/kernel/cpu/bugs.c
+@@ -57,12 +57,6 @@
+ {
+ 	identify_boot_cpu();
+ 
+-	/*
+-	 * identify_boot_cpu() initialized SMT support information, let the
+-	 * core code know.
+-	 */
+-	cpu_smt_check_topology();
+-
+ 	if (!IS_ENABLED(CONFIG_SMP)) {
+ 		pr_info("CPU: ");
+ 		print_cpu_info(&boot_cpu_data);
+--- b/include/linux/cpu.h
++++ a/include/linux/cpu.h
+@@ -267,11 +267,9 @@
+ #if defined(CONFIG_SMP) && defined(CONFIG_HOTPLUG_SMT)
+ extern enum cpuhp_smt_control cpu_smt_control;
+ extern void cpu_smt_disable(bool force);
+-extern void cpu_smt_check_topology(void);
+ #else
+ # define cpu_smt_control		(CPU_SMT_ENABLED)
+ static inline void cpu_smt_disable(bool force) { }
+-static inline void cpu_smt_check_topology(void) { }
+ #endif
+ 
+ #endif /* _LINUX_CPU_H_ */
+--- b/kernel/cpu.c
++++ a/kernel/cpu.c
+@@ -374,16 +374,6 @@
+ 	}
+ }
+ 
+-/*
+- * The decision whether SMT is supported can only be done after the full
+- * CPU identification. Called from architecture code.
+- */
+-void __init cpu_smt_check_topology(void)
+-{
+-	if (!topology_smt_supported())
+-		cpu_smt_control = CPU_SMT_NOT_SUPPORTED;
+-}
+-
+ static int __init smt_cmdline_disable(char *str)
+ {
+ 	cpu_smt_disable(str && !strcmp(str, "force"));
+@@ -2063,6 +2053,9 @@
+ 
+ static int __init cpu_smt_state_init(void)
+ {
++	if (!topology_smt_supported())
++		cpu_smt_control = CPU_SMT_NOT_SUPPORTED;
++
+ 	return sysfs_create_group(&cpu_subsys.dev_root->kobj,
+ 				  &cpuhp_smt_attr_group);
+ }

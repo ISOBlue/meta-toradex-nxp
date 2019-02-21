@@ -1,0 +1,95 @@
+--- b/arch/x86/include/asm/idle.h
++++ a/arch/x86/include/asm/idle.h
+@@ -1,6 +1,13 @@
+ #ifndef _ASM_X86_IDLE_H
+ #define _ASM_X86_IDLE_H
+ 
++#define IDLE_START 1
++#define IDLE_END 2
++
++struct notifier_block;
++void idle_notifier_register(struct notifier_block *n);
++void idle_notifier_unregister(struct notifier_block *n);
++
+ #ifdef CONFIG_X86_64
+ void enter_idle(void);
+ void exit_idle(void);
+--- b/arch/x86/kernel/process.c
++++ a/arch/x86/kernel/process.c
+@@ -68,6 +68,19 @@
+ 
+ #ifdef CONFIG_X86_64
+ static DEFINE_PER_CPU(unsigned char, is_idle);
++static ATOMIC_NOTIFIER_HEAD(idle_notifier);
++
++void idle_notifier_register(struct notifier_block *n)
++{
++	atomic_notifier_chain_register(&idle_notifier, n);
++}
++EXPORT_SYMBOL_GPL(idle_notifier_register);
++
++void idle_notifier_unregister(struct notifier_block *n)
++{
++	atomic_notifier_chain_unregister(&idle_notifier, n);
++}
++EXPORT_SYMBOL_GPL(idle_notifier_unregister);
+ #endif
+ 
+ /*
+@@ -384,14 +397,14 @@
+ void enter_idle(void)
+ {
+ 	this_cpu_write(is_idle, 1);
++	atomic_notifier_call_chain(&idle_notifier, IDLE_START, NULL);
+-	idle_notifier_call_chain(IDLE_START);
+ }
+ 
+ static void __exit_idle(void)
+ {
+ 	if (x86_test_and_clear_bit_percpu(0, is_idle) == 0)
+ 		return;
++	atomic_notifier_call_chain(&idle_notifier, IDLE_END, NULL);
+-	idle_notifier_call_chain(IDLE_END);
+ }
+ 
+ /* Called from interrupts to signify idle end */
+--- b/include/linux/cpu.h
++++ a/include/linux/cpu.h
+@@ -276,11 +276,4 @@
+ static inline void cpu_smt_check_topology(void) { }
+ #endif
+ 
+-#define IDLE_START 1
+-#define IDLE_END 2
+-
+-void idle_notifier_register(struct notifier_block *n);
+-void idle_notifier_unregister(struct notifier_block *n);
+-void idle_notifier_call_chain(unsigned long val);
+-
+ #endif /* _LINUX_CPU_H_ */
+--- b/kernel/cpu.c
++++ a/kernel/cpu.c
+@@ -2206,23 +2206,3 @@
+ #endif
+ 	this_cpu_write(cpuhp_state.state, CPUHP_ONLINE);
+ }
+-
+-static ATOMIC_NOTIFIER_HEAD(idle_notifier);
+-
+-void idle_notifier_register(struct notifier_block *n)
+-{
+-	atomic_notifier_chain_register(&idle_notifier, n);
+-}
+-EXPORT_SYMBOL_GPL(idle_notifier_register);
+-
+-void idle_notifier_unregister(struct notifier_block *n)
+-{
+-	atomic_notifier_chain_unregister(&idle_notifier, n);
+-}
+-EXPORT_SYMBOL_GPL(idle_notifier_unregister);
+-
+-void idle_notifier_call_chain(unsigned long val)
+-{
+-	atomic_notifier_call_chain(&idle_notifier, val, NULL);
+-}
+-EXPORT_SYMBOL_GPL(idle_notifier_call_chain);
