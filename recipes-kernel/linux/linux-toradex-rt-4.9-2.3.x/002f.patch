@@ -1,0 +1,42 @@
+--- b/include/linux/cpu.h
++++ a/include/linux/cpu.h
+@@ -266,10 +266,8 @@
+ 
+ #if defined(CONFIG_SMP) && defined(CONFIG_HOTPLUG_SMT)
+ extern enum cpuhp_smt_control cpu_smt_control;
+-extern void cpu_smt_disable(bool force);
+ #else
+ # define cpu_smt_control		(CPU_SMT_ENABLED)
+-static inline void cpu_smt_disable(bool force) { }
+ #endif
+ 
+ #endif /* _LINUX_CPU_H_ */
+--- b/kernel/cpu.c
++++ a/kernel/cpu.c
+@@ -360,23 +360,13 @@
+ enum cpuhp_smt_control cpu_smt_control __read_mostly = CPU_SMT_ENABLED;
+ EXPORT_SYMBOL_GPL(cpu_smt_control);
+ 
++static int __init smt_cmdline_disable(char *str)
+-void __init cpu_smt_disable(bool force)
+ {
++	cpu_smt_control = CPU_SMT_DISABLED;
++	if (str && !strcmp(str, "force")) {
+-	if (cpu_smt_control == CPU_SMT_FORCE_DISABLED ||
+-		cpu_smt_control == CPU_SMT_NOT_SUPPORTED)
+-		return;
+-
+-	if (force) {
+ 		pr_info("SMT: Force disabled\n");
+ 		cpu_smt_control = CPU_SMT_FORCE_DISABLED;
+-	} else {
+-		cpu_smt_control = CPU_SMT_DISABLED;
+ 	}
+-}
+-
+-static int __init smt_cmdline_disable(char *str)
+-{
+-	cpu_smt_disable(str && !strcmp(str, "force"));
+ 	return 0;
+ }
+ early_param("nosmt", smt_cmdline_disable);

@@ -1,7 +1,7 @@
 SECTION = "USB"
 SUMMARY = "Fix for USB suspend resume on Vybrid"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/LICENSE;md5=4d92cd373abda3937c2bc47fbc49d690"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 PR = "r1"
 
@@ -31,6 +31,5 @@ FILES_${PN} += " \
 NATIVE_SYSTEMD_SUPPORT = "1"
 SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE_${PN} = "usb-suspend.service usb-resume.service"
-SYSTEMD_AUTO_ENABLE_mx6 = "disable"
-SYSTEMD_AUTO_ENABLE_t30 = "disable"
-SYSTEMD_AUTO_ENABLE_t20 = "disable"
+SYSTEMD_AUTO_ENABLE_vf = "enable"
+SYSTEMD_AUTO_ENABLE = "disable"

@@ -1,0 +1,34 @@
+--- b/include/linux/cpu.h
++++ a/include/linux/cpu.h
+@@ -29,7 +29,7 @@
+ };
+ 
+ extern void boot_cpu_init(void);
++extern void boot_cpu_state_init(void);
+-extern void boot_cpu_hotplug_init(void);
+ 
+ extern int register_cpu(struct cpu *cpu, int num);
+ extern struct device *get_cpu_device(unsigned cpu);
+--- b/init/main.c
++++ a/init/main.c
+@@ -509,8 +509,8 @@
+ 	setup_command_line(command_line);
+ 	setup_nr_cpu_ids();
+ 	setup_per_cpu_areas();
++	boot_cpu_state_init();
+ 	smp_prepare_boot_cpu();	/* arch-specific boot-cpu hooks */
+-	boot_cpu_hotplug_init();
+ 
+ 	build_all_zonelists(NULL, NULL);
+ 	page_alloc_init();
+--- b/kernel/cpu.c
++++ a/kernel/cpu.c
+@@ -1944,7 +1944,7 @@
+ /*
+  * Must be called _AFTER_ setting up the per_cpu areas
+  */
++void __init boot_cpu_state_init(void)
+-void __init boot_cpu_hotplug_init(void)
+ {
+ 	per_cpu_ptr(&cpuhp_state, smp_processor_id())->state = CPUHP_ONLINE;
+ }

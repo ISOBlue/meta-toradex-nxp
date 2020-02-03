@@ -17,24 +17,24 @@ Dependencies
 This layer depends on:
 
   URI: git://git.openembedded.org/bitbake
-  branch: 1.32
+  branch: 1.36
   revision: HEAD
 
   URI: git://git.openembedded.org/openembedded-core
   layer: meta
-  branch: morty
+  branch: rocko
   revision: HEAD
 
     URI: git://git.yoctoproject.org/meta-freescale
-  branch: morty
+  branch: rocko
   revision: HEAD
 
   URI: https://github.com/Freescale/meta-freescale-3rdparty.git
-  branch: morty
+  branch: rocko
   revision: HEAD
 
   URI: git://git.toradex.com/meta-toradex-bsp-common
-  branch: morty
+  branch: rocko
   revision: HEAD
 
 Patches
